@@ -3,46 +3,45 @@ import axios from 'axios';
 import './App.css';
 
 function App() {
-    // 1. මතකය: ටයිප් කරන අලුත් වැඩේ
     const [task, setTask] = useState('');
-
-    // මතකය: Database එකෙන් ගේන වැඩ ලිස්ට් එක (Array එකක්)
     const [tasksList, setTasksList] = useState([]);
 
-    // 2. පිටුව Load වෙනකොටම වැඩ ලිස්ට් එක ගේනවා (GET)
     useEffect(() => {
         fetchTasks();
     }, []);
 
-    // වේටර්ට කතා කරලා දත්ත ටික ගේන ෆන්ක්ෂන් එක
     const fetchTasks = () => {
         axios.get('http://localhost:8080/tasks')
-            .then((response) => {
-                setTasksList(response.data); // ගෙනාපු දත්ත ටික මතකයට දාගන්නවා
-            })
-            .catch((error) => console.error("දත්ත ගේද්දී දෝෂයක්:", error));
+            .then((response) => setTasksList(response.data))
+            .catch((error) => console.error("Error:", error));
     };
 
-    // 3. අලුත් එකක් සේව් කිරීම (POST)
+    // 1. අලුත් එකක් සේව් කිරීම (POST)
     const handleAddTask = () => {
-        if(task.trim() === '') return; // හිස්ව යවන එක නවත්තන්න
-
-        axios.post('http://localhost:8080/tasks', {
-            taskName: task,
-            completed: false
-        })
+        if(task.trim() === '') return;
+        axios.post('http://localhost:8080/tasks', { taskName: task, completed: false })
             .then(() => {
-                setTask(''); // කොටුව ආයේ හිස් කරනවා
-                fetchTasks(); // අලුත් එක සේව් වුණ ගමන්ම, අපේ ලිස්ට් එක ආයෙත් අලුත් (Refresh) කරනවා
-            })
-            .catch((error) => {
-                console.error("සේව් වෙද්දී දෝෂයක්:", error);
+                setTask('');
+                fetchTasks();
             });
     };
 
-    // 4. පෙනුම (UI එක)
+    // 2. වැඩේ ඉවරයි කියලා Update කිරීම (PUT)
+    const handleUpdateTask = (taskItem) => {
+        axios.put(`http://localhost:8080/tasks/${taskItem.id}`, {
+            taskName: taskItem.taskName,
+            completed: !taskItem.completed
+        }).then(() => fetchTasks());
+    };
+
+    // 3. මකා දැමීම (DELETE)
+    const handleDeleteTask = (id) => {
+        axios.delete(`http://localhost:8080/tasks/${id}`)
+            .then(() => fetchTasks());
+    };
+
     return (
-        <div style={{ padding: '30px', fontFamily: 'Arial', maxWidth: '500px', margin: 'auto' }}>
+        <div style={{ padding: '30px', fontFamily: 'Arial', maxWidth: '600px', margin: 'auto' }}>
             <h1 style={{ textAlign: 'center', color: '#333' }}>Task Manager App 🚀</h1>
 
             <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
@@ -58,12 +57,26 @@ function App() {
                 </button>
             </div>
 
-            {/* Database එකෙන් ගෙනාපු දත්ත ටික පෙන්වීම */}
             <h3>මගේ වැඩ ලිස්ට් එක:</h3>
             <ul style={{ listStyleType: 'none', padding: 0 }}>
                 {tasksList.map((t) => (
-                    <li key={t.id} style={{ padding: '10px', backgroundColor: '#f4f4f4', marginBottom: '8px', borderRadius: '4px', borderLeft: '5px solid #28a745' }}>
-                        {t.taskName}
+                    <li key={t.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px', backgroundColor: '#f4f4f4', marginBottom: '8px', borderRadius: '4px', borderLeft: t.completed ? '5px solid gray' : '5px solid #28a745' }}>
+
+                        {/* වැඩේ ඉවර නම් අකුරු මැදින් ඉරක් අඳිනවා */}
+                        <span style={{ textDecoration: t.completed ? 'line-through' : 'none', flex: 1, color: t.completed ? 'gray' : 'black' }}>
+              {t.taskName}
+            </span>
+
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button onClick={() => handleUpdateTask(t)} style={{ padding: '5px 10px', cursor: 'pointer', backgroundColor: t.completed ? 'gray' : '#ffc107', color: 'black', border: 'none', borderRadius: '3px' }}>
+                                {t.completed ? 'Undo' : 'Done'}
+                            </button>
+
+                            <button onClick={() => handleDeleteTask(t.id)} style={{ padding: '5px 10px', cursor: 'pointer', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '3px' }}>
+                                Delete
+                            </button>
+                        </div>
+
                     </li>
                 ))}
             </ul>
