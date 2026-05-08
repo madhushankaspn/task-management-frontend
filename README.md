@@ -31,4 +31,4 @@ To run this React application locally:
 
 1. Clone the repository:
    ```bash
-   git clone [[Your-Frontend-Repo-URL](https://github.com/madhushankaspn/task-management-frontend.git)]
+   git clone [https://github.com/madhushankaspn/task-management-frontend.git]
