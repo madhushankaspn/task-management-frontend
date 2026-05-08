@@ -16,7 +16,6 @@ function App() {
             .catch((error) => console.error("Error:", error));
     };
 
-    // 1. අලුත් එකක් සේව් කිරීම (POST)
     const handleAddTask = () => {
         if(task.trim() === '') return;
         axios.post('http://localhost:8080/tasks', { taskName: task, completed: false })
@@ -26,7 +25,6 @@ function App() {
             });
     };
 
-    // 2. වැඩේ ඉවරයි කියලා Update කිරීම (PUT)
     const handleUpdateTask = (taskItem) => {
         axios.put(`http://localhost:8080/tasks/${taskItem.id}`, {
             taskName: taskItem.taskName,
@@ -34,51 +32,62 @@ function App() {
         }).then(() => fetchTasks());
     };
 
-    // 3. මකා දැමීම (DELETE)
     const handleDeleteTask = (id) => {
         axios.delete(`http://localhost:8080/tasks/${id}`)
             .then(() => fetchTasks());
     };
 
-    return (
-        <div style={{ padding: '30px', fontFamily: 'Arial', maxWidth: '600px', margin: 'auto' }}>
-            <h1 style={{ textAlign: 'center', color: '#333' }}>Task Manager App 🚀</h1>
+    const completedCount = tasksList.filter(t => t.completed).length;
 
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-                <input
-                    type="text"
-                    placeholder="අලුත් වැඩක් ටයිප් කරන්න..."
-                    value={task}
-                    onChange={(e) => setTask(e.target.value)}
-                    style={{ padding: '10px', flex: '1', borderRadius: '5px', border: '1px solid #ccc' }}
-                />
-                <button onClick={handleAddTask} style={{ padding: '10px 20px', cursor: 'pointer', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '5px' }}>
-                    Add
-                </button>
+    return (
+        <div className="app-container">
+            <h1 className="title">Task Master ✨</h1>
+
+            <div className="stats">
+                <b>{completedCount}</b> of <b>{tasksList.length}</b> tasks completed!
             </div>
 
-            <h3>මගේ වැඩ ලිස්ට් එක:</h3>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-                {tasksList.map((t) => (
-                    <li key={t.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px', backgroundColor: '#f4f4f4', marginBottom: '8px', borderRadius: '4px', borderLeft: t.completed ? '5px solid gray' : '5px solid #28a745' }}>
+            <div className="input-group">
+                <input
+                    type="text"
+                    className="task-input"
+                    placeholder="Add a new task..."
+                    value={task}
+                    onChange={(e) => setTask(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddTask()}
+                />
+                <button className="add-btn" onClick={handleAddTask}>Add</button>
+            </div>
 
-                        {/* වැඩේ ඉවර නම් අකුරු මැදින් ඉරක් අඳිනවා */}
-                        <span style={{ textDecoration: t.completed ? 'line-through' : 'none', flex: 1, color: t.completed ? 'gray' : 'black' }}>
-              {t.taskName}
-            </span>
+            <ul className="task-list">
+                {tasksList.length === 0 ? (
+                    <div className="empty-state">No tasks yet! 🎉</div>
+                ) : (
+                    tasksList.map((t) => (
+                        <li key={t.id} className={`task-item ${t.completed ? 'completed' : ''}`}>
 
-                        <div style={{ display: 'flex', gap: '5px' }}>
-                            <button onClick={() => handleUpdateTask(t)} style={{ padding: '5px 10px', cursor: 'pointer', backgroundColor: t.completed ? 'gray' : '#ffc107', color: 'black', border: 'none', borderRadius: '3px' }}>
-                                {t.completed ? 'Undo' : 'Done'}
-                            </button>
+                            <span className="task-text">{t.taskName}</span>
 
-                            <button onClick={() => handleDeleteTask(t.id)} style={{ padding: '5px 10px', cursor: 'pointer', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '3px' }}>
-                                Delete
-                            </button>
-                        </div>
+                            <div className="action-btns">
+                                <button
+                                    className={`icon-btn ${t.completed ? 'undo-btn' : 'done-btn'}`}
+                                    onClick={() => handleUpdateTask(t)}
+                                    title={t.completed ? "Undo" : "Mark as Done"}
+                                >
+                                    {t.completed ? '🔄' : '✅'}
+                                </button>
 
-                    </li>
-                ))}
+                                <button
+                                    className="icon-btn delete-btn"
+                                    onClick={() => handleDeleteTask(t.id)}
+                                    title="Delete"
+                                >
+                                    🗑️
+                                </button>
+                            </div>
+                        </li>
+                    ))
+                )}
             </ul>
         </div>
     );
