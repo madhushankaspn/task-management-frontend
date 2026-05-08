@@ -1,16 +1,34 @@
-# React + Vite
+# Task Master ✨ - Frontend (React.js)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the front-end repository for the **Task Master** application, a modern and responsive Single Page Application (SPA) built to efficiently manage daily tasks. It communicates with a Spring Boot REST API to perform full CRUD operations.
 
-Currently, two official plugins are available:
+🔗 **Backend API Repository:** [Add your Spring Boot GitHub Repo Link Here]
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Features
 
-## React Compiler
+* **Interactive UI:** Clean, gradient-styled interface with smooth hover effects.
+* **Real-time Progress:** Dynamic task completion statistics.
+* **CRUD Operations:** Seamlessly add, view, update (mark as done/undo), and delete tasks.
+* **Responsive Design:** Optimized for both desktop and mobile viewing.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 💻 Tech Stack
 
-## Expanding the ESLint configuration
+* **Framework:** React.js (Bootstrapped with Vite for high performance)
+* **HTTP Client:** Axios
+* **Styling:** Custom CSS3 with modern flexbox layouts and Google Fonts (Poppins)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📸 Screenshots
+
+*(Replace the placeholder links below with your actual image links)*
+
+* **Main Interface:**
+ <img width="732" height="643" alt="image" src="https://github.com/user-attachments/assets/cf68a236-ec83-4961-a36e-3a0d69d46802" />
+
+
+## 🛠️ Getting Started
+
+To run this React application locally:
+
+1. Clone the repository:
+   ```bash
+   git clone [[Your-Frontend-Repo-URL](https://github.com/madhushankaspn/task-management-frontend.git)]
